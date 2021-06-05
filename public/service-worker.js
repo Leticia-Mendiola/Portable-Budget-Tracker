@@ -12,16 +12,14 @@ const FILES_TO_CACHE = [
 
 // install
 self.addEventListener("install", function (evt) {
-  // pre cache image data
+  // pre cache transaction data
   evt.waitUntil(
-    caches.open(DATA_CACHE_NAME).then((cache) => cache.add("/api/images"))
+    caches.open(DATA_CACHE_NAME).then((cache) => cache.add("/api/transaction"))
   );
-    
   // pre cache all static assets
   evt.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE))
   );
-
   // tell the browser to activate this service worker immediately once it
   // has finished installing
   self.skipWaiting();
@@ -41,7 +39,6 @@ self.addEventListener("activate", function(evt) {
       );
     })
   );
-
   self.clients.claim();
 });
 
@@ -56,7 +53,6 @@ self.addEventListener("fetch", function(evt) {
             if (response.status === 200) {
               cache.put(evt.request.url, response.clone());
             }
-
             return response;
           })
           .catch(err => {
@@ -65,7 +61,6 @@ self.addEventListener("fetch", function(evt) {
           });
       }).catch(err => console.log(err))
     );
-
     return;
   }
 
